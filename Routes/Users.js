@@ -255,6 +255,7 @@ router.delete("/:id" , (req , res) => {
     */ 
     const index = users.indexOf(user);
     users.splice(index , 1);
+    // removing elements from index to how many elements are to be deleted
 
     return res.status(200).json({
         success : true , 
@@ -270,9 +271,105 @@ router.delete("/:id" , (req , res) => {
 
 /*
     Route : /users/subscription-details/(id)
+    Full Route : http://localhost:8081/users/subscription-details/(id)
     Method : GET 
-    Info : Get user subscription details 
+    Description : Get user subscription details 
         >> Date of Subscription
         >> Valid Till
         >> Is there any fine
+    Access : Public
+    Parameters : ID
 */
+router.get("/subscription-details/:id" , (req ,res) => {
+    const {id} = req.params;
+    const user = users.find((each)=> each.id === id);
+
+    if(!user){
+        return res.status(404).json({
+            success : false ,
+            message : "User With This ID Doesn't Exist" , 
+        });
+    };
+
+    // a method with data as a parameter , it will be called this is declaration
+    const getDataInDays = (data = "") => {
+        // This function converts date into how many days from 01/01/1970
+        let date ; 
+        if(data === ""){
+            date = new Date();
+            // if no data is provided means new member then we will add today's date
+        }else{
+            date = new Date(data);
+            // if its an old data or member , date will be there
+        };
+
+        let days = Math.floor(date / (1000*60*60*24));
+        // to reach date we need ---> 24 hours * 60 minutes * 60 seconds * 1000 miliseconds
+        return days;
+    };
+
+    const subscriptionType = (days) => {
+        // this is a method which has days as a parameter , it adds days to your subscription according to subscriptionType
+        if((user.subscriptionType == "Basic")){
+            // plan for 3 months
+            days = days + 90 ;
+        }else if((user.subscriptionType == "Standard")){
+            // plan for 6 months
+            days = days + 180 ;
+        }else if((user.subscriptionType == "Premium")){
+            // plan for a year
+            days = days + 365 ;
+        }
+        // console.log("after subscription date : " , days);
+        return days;
+    }
+
+     
+    let returnDate = getDataInDays(user.returnDate);
+    // book return date to know fine 
+    let currentDate = getDataInDays();
+    // current date to know if subscription has expired / book late fee
+    let subscriptionDate = getDataInDays(user.subscriptionDate);
+    // day from 1970 when you subscribed to the library 
+    let subscriptionExpiration = subscriptionType(subscriptionDate);
+    // final expiration date of your subscription
+
+    console.log("returnDate" , returnDate);
+    console.log("currentDate" , currentDate);
+    console.log("subscriptionDate" , subscriptionDate);
+    console.log("subscriptionExpiration" , subscriptionExpiration);
+
+
+    /*   
+        1 jan 1970 se check ho rha h ye sabh , uss date se kitne din hogye h 
+
+        line 322 ----->let currentDate = getDataInDays();
+                            currentDate
+                            19512
+        line 321------>let returnDate = getDataInDays("05/01/2022");
+                            returnDate
+                            19112
+    */
+
+    const data = {
+        ...user , 
+        // showing all user data and then new data is 
+        //      KEY           :            VALUE
+        isSubscriptionExpired : subscriptionExpiration <= currentDate ,
+        // boolean , true or false 
+        daysLeftForExpiration : subscriptionExpiration <= currentDate ? 0 : subscriptionExpiration - currentDate ,
+        // if expired , days left = 0  else we will subtract
+        fine : (returnDate < currentDate ? (subscriptionExpiration <= currentDate ? 100 : 50) : 0) ,
+        // 100 for subscription expiration , 50 for late , 0 for none
+    }
+
+    return res.status(200).json({
+        success : true , 
+        message : "Subscription Detail For The User Is" ,
+        data : data ,
+    })
+})
+
+
+
+

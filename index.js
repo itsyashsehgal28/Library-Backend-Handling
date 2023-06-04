@@ -48,7 +48,7 @@ app.get("/" , (req , res) => {
 
 // For all other routes which are not defined or implemented
 app.get("*" , (req , res) => {
-    res.status(404).json({
+    res.status(501).json({
         message : "This route doesn't exist"
     })
 });

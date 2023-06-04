@@ -123,3 +123,96 @@ router.get("/:id" , (req , res) => {
 
 
 
+/*
+    Route : /
+    full route : http://localhost:8081/books
+    Method : POST
+    Description : Add A New Book
+    Access : Public
+    Parameters : none
+    Data : id , name , author , genre , price , publisher
+*/
+
+router.post("/" , (req, res) => {
+    const {data} = req.body ; 
+    if(!data){
+        // if no data entered then book will not be added
+        return res.status(400).json({
+            success : false , 
+            message : "No Data Found , Book Not Added"
+        });
+    }
+
+    const book = books.find((each)=> each.id === data.id);
+    if(book){
+        // if data.id matches with an existing id then also book wont be added
+        return res.status(404).json({
+            success : false , 
+            message : "Book With Same ID Already Exists , Enter A Unique ID"
+        });
+    }
+    const allBooks = {...books , data} ; 
+    // using spread operator to view all details
+    return res.status(201).json({
+        success : true , 
+        message : "Book Added Successfully" , 
+        data : allBooks ,
+    });
+});
+
+
+
+
+/*
+    Route : /:id
+    full route : http://localhost:8081/books/:id
+    Method : PUT
+    Description : Update a book by id
+    Access : Public
+    Parameters : id
+    Data : id , name , author , genre , price , publisher
+*/
+router.put("/:id" , (req, res) => {
+    const {id} = req.params;
+    // id wont be updated , will only be passed 
+    const {data} = req.body;
+    const book = books.find((each)=> each.id === id);
+    if(!book){
+        return res.status(400).json({
+            success : false , 
+            message : "No Book Found With The Same ID , Try Again"
+        });
+    };
+    
+    const updateBookData = books.map((each)=> {
+        // mapping each id
+        if(each.id===id)
+        {
+            // if ID matches with the passed id then 
+            return {...each , ...data }; 
+            // ...each means all values this ID is holding right now 
+            // ...data means the values that need to be updated sent through the body
+            // ...each , ...data means update values that need to be updated and keep others same
+            
+
+            /*                                                  SPREAD OPERATOR EXAMPLE 
+                let x = 3 , y=2 ;
+                x =5 ;
+
+                output of x and y will now be x=5 , y=2
+                BECAUSE RECENT VALUES ARE TAKEN AND OLD VALUES THAT AREN'T UPDATED REMAIN SAME
+            */
+        };
+        return each ; 
+    });
+
+    res.status(200).json({
+        success : true , 
+        message : "Book Updated By Their ID" ,
+        data : updateBookData ,
+    });
+});
+
+
+
+
