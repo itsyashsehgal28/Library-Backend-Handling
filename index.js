@@ -1,6 +1,14 @@
 const express = require ("express");
 // installing express
 
+    const dotenv = require("dotenv");
+    // importing dotenv(.env) file for mongoDB URL and conection purposes 
+    dotenv.config();
+    // to activate dotenv 
+
+    const DbConnection = require("./databaseConnection");
+    DbConnection();
+
 const app = express();
 // initializing our application which will use express
 
