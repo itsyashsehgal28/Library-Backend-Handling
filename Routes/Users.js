@@ -1,7 +1,9 @@
-// const { Router } = require("express");
+
 // WE WRITE IN CURLY BRACES SINCE DATA MIGHT BE ADDED IN THESE FILES LIKE MORE ARRAYS MIGHT BE ADDED 
 // THEN IT WILL BE COMPLEX TO DETERMINE WHICH TO USE SO WE ADD CURLY BRACES (for referrence :  DAY 39 , 1:48:00 )
 
+
+// const { Router } = require("express");
 const express = require("express");
 // importing express
 
@@ -9,12 +11,15 @@ const router = express.Router();
 // Initializing express
 // instead of writing app.get we will write router.get
 
-module.exports = router ;
-// returning the particular export back 
-
-
 const {users} = require("../data/users.json");
 // importing the users database
+
+
+// const bookModel = require("../models/book-model");
+// const userModel = require("../models/user-model");  
+// OR now we can write this together since both files are inside LOCAL index.js
+const {userModel , bookModel} = require("../models/index");
+// this has both the files imported , choose whatever approach you like
 
 
 
@@ -370,6 +375,10 @@ router.get("/subscription-details/:id" , (req ,res) => {
     })
 })
 
+
+
+module.exports = router ;
+// returning the particular export back 
 
 
 
