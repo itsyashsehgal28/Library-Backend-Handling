@@ -25,12 +25,12 @@ const {userModel , bookModel} = require("../models");
 
 
 exports.getAllBooks = async(req , res) => {
-        const book = await bookModel.find();
+        const books = await bookModel.find();
         // find is a method of MONGODB to find all elements works same as findall method
         // this we are fetching FROM DATABASE , NOT FROM JSON FILE
         // function of MONGODB to find all records 
 
-        if(book.length == 0 )
+        if(books.length == 0 )
         {
                 return res.status(400).json({
                         success : false , 
@@ -40,7 +40,7 @@ exports.getAllBooks = async(req , res) => {
         return res.status(200).json({
                 success : true , 
                 message : "Book Database Found" , 
-                data : book ,
+                data : books ,
         });
 } ; 
 
@@ -199,3 +199,4 @@ exports.updateBookById = async(req, res) => {
 
 
     
+                              
