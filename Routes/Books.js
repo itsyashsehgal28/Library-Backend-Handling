@@ -20,7 +20,7 @@ const {users} = require("../data/users.json");
 const {userModel , bookModel} = require("../models/index");
 // this has both the files imported , choose whatever approach you like
 
-const { getAllBooks, getBookById, getAllIssuedBooks, addNewBook , updateBookById} = require("../controllers/book-controllers");
+const { getAllBooks, getBookById, getAllIssuedBooks, addNewBook , updateBookById , deleteBookById} = require("../controllers/book-controllers");
 
 
 // http://localhost:8081/books
@@ -236,6 +236,11 @@ router.put("/:id" , updateBookById);
 //         data : updateBookData ,
 //     });
 // });
+
+
+router.delete("/:id" , deleteBookById);
+
+
 
 
 module.exports = router ;

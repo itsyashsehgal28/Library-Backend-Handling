@@ -75,7 +75,7 @@ exports.getAllIssuedBooks = async(req, res) => {
         // when we are finding based on a certain condition we need to populate to bind those results as an array into book
 
         // Data Transfer Object - DTO
-        // const issuedBooks = require("../dtos/book-dto");
+        const IssuedBook = require("../dtos/book-dto");
         const issuedBooks = user.map((each) => new IssuedBook(each));
         // calling the DTO
         // mapping each and every element in user with "issuedBook attribute"
@@ -197,6 +197,25 @@ exports.updateBookById = async(req, res) => {
 };
 
 
+exports.deleteBookById = async(req, res) => {
+        const {id} = req.params;
+    const deleteBook = await bookModel.findByIdAndDelete(id);
+    
+    if(!deleteBook)
+    {
+        // if book is not found then we cannot delete that book 
+        return res.status(404).json({
+            success : false , 
+            message : "Book Does Not Exist"
+        });
+    };
+
+    return res.status(200).json({
+                success : true , 
+                message : "Book Deleted" , 
+                UpdatedData : await bookModel.find() , 
+        });
+}
 
     
                               

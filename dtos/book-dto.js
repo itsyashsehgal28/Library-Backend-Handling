@@ -23,11 +23,11 @@ class IssuedBook {
         // constructor is auto invoked when an object is made 
 
         // transferring user info to this object 
-        this._id = user.IssuedBook._id ; 
-        this.name = user.IssuedBook.name ;
-        this.genre = user.IssuedBook.genre ; 
-        this.price = user.IssuedBook.price ; 
-        this.publisher = user.IssuedBook.publisher ; 
+        this._id = user.issuedBook._id ; 
+        this.name = user.issuedBook.name ;
+        this.genre = user.issuedBook.genre ; 
+        this.price = user.issuedBook.price ; 
+        this.publisher = user.issuedBook.publisher ; 
         this.issuedBy = user.issuedBy ; 
         this.issuedDate = user.issuedDate ; 
         this.returnDate = user.returnDate ; 
